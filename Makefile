@@ -1,23 +1,19 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -std=c99
-LIBS=
+LIBFLAGS=-shared -Wl,-soname,libpadding.so
 PREFIX=/usr/local/bin
 
-OBJQ = padding.c
+OBJQ = padding.o
 
 %.o: src/%.c
 	@echo CC $^
-	@$(CC) -c -o $@ $< $(CFLAGS)
+	@$(CC) -fpic -g -c $(CFLAGS) -o $@ $<
 
-pad: $(OBJQ)
+libpadding.so: $(OBJQ)
 	@echo CC $^
-	@$(CC) -o $@ $^ $(CLFAGS) $(LIBS)
+	@$(CC) $(LIBFLAGS) $(CFLAGS) -o $@ $^
 	@rm -f *.o
 
 clean:
 	@echo Cleaning dir...
-	@rm -f pad *.o
-
-install:
-	@echo INSTALL pad
-	@cp pad $(PREFIX)
+	@rm -f *.so *.o
