@@ -1,9 +1,9 @@
 CC=gcc
-CFLAGS=-Wall -std=c99
+CFLAGS=-Wall -Wextra -std=c99
 LIBS=
 PREFIX=/usr/local/bin
 
-OBJQ = main.o
+OBJQ = padding.c
 
 %.o: src/%.c
 	@echo CC $^
