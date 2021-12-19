@@ -1,14 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#ifndef _LIB
-#include <stdio.h>
-#endif
-#include "main.h"
-
-int main()
-{
-	return 0;
-}
+#include "padding.h"
 
 /*
  * Takes an input string, a result string buffer and a character

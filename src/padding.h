@@ -1,10 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
-
-#define AUTHOR "zocker"
-#define MAIL "zocker@10zen.eu"
-#define LICENSE "GPLv3"
-#define VERSION "0.0.1"
+#ifndef PADDING_H
+#define PADDING_H
 
 // Size of input, input, size of result, result string, padding
 char *pad_left(int, char *, int, char *, char);
