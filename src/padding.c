@@ -11,7 +11,7 @@
  */
 char *pad_left(char *s, int size, char *p, char _pad)
 {
-	int sc = strlen(s) - 1;
+	int sc = strlen(s);
 	if (sc >= size)
 		return s;
 
@@ -29,7 +29,7 @@ char *pad_left(char *s, int size, char *p, char _pad)
  */
 char *pad_both(char *s, int size, char *p, char _pad)
 {
-	int sc = strlen(s) - 1;
+	int sc = strlen(s);
 	if (sc >= size)
 		return s;
 	int b_size = (size - sc) / 2;
@@ -51,7 +51,7 @@ char *pad_both(char *s, int size, char *p, char _pad)
  */
 char *pad_right(char *s, int size, char *p, char _pad)
 {
-	int sc =  strlen(s) - 1;
+	int sc =  strlen(s);
 	if (sc >= size)
 		return s;
 
