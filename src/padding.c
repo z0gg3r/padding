@@ -7,10 +7,11 @@
  * and pads the input string to the size of the result buffer,
  * with the differnce in size being filled up with the char.
  * Char will be added to the left of the string.
- * Neither size nor sc should count the null terminator.
+ * Size should not count the null terminator.
  */
-char *pad_left(int sc, char *s, int size, char *p, char _pad)
+char *pad_left(char *s, int size, char *p, char _pad)
 {
+	int sc = strlen(s) - 1;
 	if (sc >= size)
 		return s;
 
@@ -26,8 +27,9 @@ char *pad_left(int sc, char *s, int size, char *p, char _pad)
 /*
  * Char will be added to both sides of the string.
  */
-char *pad_both(int sc, char *s, int size, char *p, char _pad)
+char *pad_both(char *s, int size, char *p, char _pad)
 {
+	int sc = strlen(s) - 1;
 	if (sc >= size)
 		return s;
 	int b_size = (size - sc) / 2;
@@ -47,8 +49,9 @@ char *pad_both(int sc, char *s, int size, char *p, char _pad)
 /*
  * Char will be added to the left of the string.
  */
-char *pad_right(int sc, char *s, int size, char *p, char _pad)
+char *pad_right(char *s, int size, char *p, char _pad)
 {
+	int sc =  strlen(s) - 1;
 	if (sc >= size)
 		return s;
 
@@ -63,17 +66,17 @@ char *pad_right(int sc, char *s, int size, char *p, char _pad)
 }
 
 /*
- * Takes an integer n and a character c and a string
- * containing c n times. Expects n to not count the
+ * Takes an integer size and a character p and a string
+ * containing p size times. Expects n to not count the
  * null terminator.
  */
 char *padding(int size, char p)
 {
 	char *s = malloc(sizeof(char) * (size + 1));
 
-	for (int i = 0; i < size - 1; ++i)
+	for (int i = 0; i < size; ++i)
 		s[i] = p;
-	s[size - 1] = '\0';
+	s[size] = '\0';
 
 	return s;
 }
