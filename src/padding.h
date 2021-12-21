@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 zocker <zocker@10zen.eu>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef PADDING_H
 #define PADDING_H
 
