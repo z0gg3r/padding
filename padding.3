@@ -1,0 +1,42 @@
+.TH PADDING 3 2021-12-21 GNU
+
+.SH NAME
+pad_left, pad_right, pad_both \- pad a string to certain length
+
+.SH SYNOPSIS
+.nf
+.BI #include <padding.h>
+.PP
+.BI "char *pad_left(char " "*s, int " "size, char " "*p, char " "c" );
+.BI "char *pad_right(char " "*s, int " "size, char " "*p, char " "c" );
+.BI "char *pad_both(char " "*s, int " "size  char " "*p, char " "c" );
+.fi
+.PP
+.SH DESCRIPTION
+The functions all take a string s, an allocated string p of length size + 1 and a character c as arguments.
+They wil concatenate s to p and (depending on the mode chosen) c a certain number of times to either one or both
+sides of s, until p has reached size as length (without the null terminator).
+
+If size is smaller or equal to the length of s, the return value is s. In all other cases a padded string p is returned.
+
+.SH EXAMPLES
+.nf
+.BI #include <padding.h>
+.BI #include <stdio.h>
+.BI #include <stdlib.h>
+.PP
+.BI int main(void)
+.BI {
+.BI 	char *s = "12345";
+.BI     char *p = malloc(sizeof(char) * 7);
+.PP
+.BI	pad_left(s, 6, p, "0");
+.BI	printf("%s\n", p);
+.BI	free(p);
+.PP
+.BI	return 0;
+.BI }
+.fi
+
+.SH AUTHOR
+zockerfreunde03/z0gg3r <zocker@10zen.eu>
