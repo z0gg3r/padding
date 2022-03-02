@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 Sebastien Helleu <flashcode@flashtux.org>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 /*
  * Copyright (C) 2003-2022 Sébastien Helleu <flashcode@flashtux.org>
  *
