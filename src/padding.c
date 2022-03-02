@@ -4,6 +4,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#include <grapheme.h>
 #include "padding.h"
 
 /*
@@ -83,4 +85,77 @@ char *padding(int size, char p)
 	s[size] = '\0';
 
 	return s;
+}
+
+int is_utf8(char *s)
+{
+	size_t ret = 0;
+	size_t off = 0;
+	int len = 0;
+
+	while (1) {
+		if (s[off] == '\0')
+			break;
+		ret = grapheme_next_character_break(s + off, SIZE_MAX);
+		if (ret == 1)
+			++len;
+		off += ret;
+	}
+
+	return len != strlen(s);
+}
+
+int utf8_len(char *s)
+{
+	size_t ret = 0;
+	size_t off = 0;
+	int len = 0;
+
+	for (; s[off] != '\0'; off += ret) {
+		ret = grapheme_next_character_break(s + off, SIZE_MAX);
+		if (ret > 1)
+			++len;
+	}
+
+	return len;
+}
+
+void utf8_char(char *s, int buf_len, char *buf)
+{
+	if (!is_utf8(s)) {
+		buf[0] = s[0];
+		for (int i = 1; i < buf_len; ++i)
+			buf[i] = '\0';
+	} else {
+		size_t ret = 0;
+		size_t off = 0;
+		size_t tmp = -1;
+
+		while (1) {
+			if (s[off] == '\0')
+				break;
+			
+			ret = grapheme_next_character_break(s + off, SIZE_MAX);
+			
+			if (ret > 1 && tmp == -1)
+				tmp = off;
+			else
+				break;
+
+			off += ret;
+		}
+
+		printf("off: %ld\ntmp: %ld\n", off, tmp);
+
+		int needed = snprintf(NULL, 0, "%.*s", (int) off, s + tmp);
+
+		if (needed <= buf_len) {
+			snprintf(buf, needed, "%.*s", (int) off, s + tmp);
+		} else {
+			buf[0] = ' ';
+			for (int i = 1; i < buf_len; ++i)
+				buf[i] = '\0';
+		}
+			
+	}
 }

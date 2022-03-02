@@ -11,4 +11,8 @@ char *pad_right(char *, int, char *, char);
 char *pad_both(char *, int, char *, char);
 char *padding(int, char);
 
+int is_utf8(char *);
+int utf8_len(char *);
+void utf8_char(char *, int, char *);
+
 #endif
