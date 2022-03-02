@@ -730,27 +730,3 @@ utf8_pos (const char *string, int real_pos)
 	}
 	return count;
 }
-
-/*
- * Duplicates an UTF-8 string, with max N chars.
- *
- * Note: result must be freed after use.
- */
-
-char *
-utf8_strndup (const char *string, int length)
-{
-	const char *end;
-
-	if (!string || (length < 0))
-		return NULL;
-
-	if (length == 0)
-		return strdup ("");
-
-	end = utf8_add_offset (string, length);
-	if (!end || (end == string))
-		return strdup (string);
-
-	return string_strndup (string, end - string);
-}

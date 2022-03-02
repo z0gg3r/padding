@@ -1,5 +1,5 @@
 AC_PREREQ([2.71])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_INIT([libpadding], [1.1.1], [zocker@10zen.eu])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 LT_PREREQ([2.4])

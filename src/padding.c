@@ -75,15 +75,16 @@ char *pad_right(char *s, int size, char *p, char *_pad)
  */
 char *padding(int size, char *p)
 {
-	char *tmp =  malloc(sizeof(char) * 12); // utf8_int_string wants => 6, so we use 12
+	char *tmp =  malloc(sizeof(char) * 5);
 	utf8_int_string(utf8_char_int(p), tmp);
 	if (utf8_strlen(tmp) == 1 && strlen(tmp) != 1)
 		size *= strlen(tmp);
 
 	char *s = malloc(sizeof(char) * (size + 1));
 
-	for (int i = 0; i < size; ++i)
-		strncat(s, tmp, strlen(tmp));
+	for (int i = 0; i < size - strlen(tmp); i += strlen(tmp))
+		for (int j = 0; j < strlen(tmp); ++j)
+			s[i + j] = tmp[j];
 	s[size] = '\0';
 
 	free(tmp);
