@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 Sebastien Helleu <flashcode@flashtux.org>/2006 Emmanuel Bothenot <kolter@openics.org>
+// SPDX-FileCopyrightText: 2022 Sébastien Helleu <flashcode@flashtux.org>/2006 Emmanuel Bouthenot <kolter@openics.org>
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 /*
