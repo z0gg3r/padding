@@ -8,8 +8,6 @@
 #include "wee-utf8.h" // stolen from Weechat (https://weechat.org)
 #include "padding.h"
 
-int _size;
-
 /*
  * Takes an input string, a result string buffer and a character
  * and pads the input string to the size of the result buffer,
@@ -23,9 +21,8 @@ char *pad_left(char *s, int size, char *p, char *_pad)
 		return s;
 
 	char *b = padding(size - strlen(s), _pad);
-	size = _size;
 
-	strncat(p, b, size - strlen(s));
+	strncat(p, b, strlen(b));
 	strncat(p, s, strlen(s));
 
 	free(b);
@@ -42,15 +39,12 @@ char *pad_both(char *s, int size, char *p, char *_pad)
 	int b_size = (size - strlen(s)) / 2;
 
 	char *b1 = padding(b_size, _pad);
-	//char *b2 = padding(b_size, _pad);
-	size = _size;
 
 	strncat(p, b1, strlen(b1));
 	strncat(p, s, strlen(s));
 	strncat(p, b1, strlen(b1));
 
 	free(b1);
-	//free(b2);
 
 	return p;
 }
@@ -63,10 +57,9 @@ char *pad_right(char *s, int size, char *p, char *_pad)
 		return s;
 
 	char *b = padding(size - strlen(s), _pad);
-	size = _size;
 
 	strncat(p, s, strlen(s));
-	strncat(p, b, size - strlen(s));
+	strncat(p, b, strlen(b));
 
 	free(b);
 
@@ -80,19 +73,17 @@ char *pad_right(char *s, int size, char *p, char *_pad)
  */
 char *padding(int size, char *p)
 {
-	char *tmp =  malloc(sizeof(char) * 5);
+	char *tmp =  calloc(5, sizeof(char));
 	utf8_int_string(utf8_char_int(p), tmp);
 	if (utf8_strlen(tmp) == 1 && strlen(tmp) != 1)
 		size *= strlen(tmp);
 
-	char *s = malloc(sizeof(char) * (size + 1));
+	char *s = calloc(size + 1, sizeof(char));
 
 	for (int i = 0; i < size - strlen(tmp); i += strlen(tmp))
 		for (int j = 0; j < strlen(tmp); ++j)
 			s[i + j] = tmp[j];
 	s[size] = '\0';
-
-	_size = size;
 
 	free(tmp);
 	return s;
