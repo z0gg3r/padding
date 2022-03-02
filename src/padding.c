@@ -120,42 +120,103 @@ int utf8_len(char *s)
 	return len;
 }
 
-void utf8_char(char *s, int buf_len, char *buf)
+void utf8_char(char *s, char *buf)
 {
-	if (!is_utf8(s)) {
-		buf[0] = s[0];
-		for (int i = 1; i < buf_len; ++i)
-			buf[i] = '\0';
-	} else {
-		size_t ret = 0;
-		size_t off = 0;
-		size_t tmp = -1;
+	utf8_int_string(utf8_char_int(s), buf);
+}
 
-		while (1) {
-			if (s[off] == '\0')
-				break;
-			
-			ret = grapheme_next_character_break(s + off, SIZE_MAX);
-			
-			if (ret > 1 && tmp == -1)
-				tmp = off;
-			else
-				break;
+/*
+ * utf8_int_string and utf8_char_int are part of Weechat's wee-utf8.c
+ * Copyright (C) 2003-2022 Sébastien Helleu <flashcode@flashtux.org>
+ * Copyright (C) 2006 Emmanuel Bouthenot <kolter@openics.org>
+ *
+ * Licensed under GPLv3, no modifications werde made
+ */
+void utf8_int_string (unsigned int unicode_value, char *string)
+{
+	if (!string)
+		return;
 
-			off += ret;
-		}
+	string[0] = '\0';
 
-		printf("off: %ld\ntmp: %ld\n", off, tmp);
-
-		int needed = snprintf(NULL, 0, "%.*s", (int) off, s + tmp);
-
-		if (needed <= buf_len) {
-			snprintf(buf, needed, "%.*s", (int) off, s + tmp);
-		} else {
-			buf[0] = ' ';
-			for (int i = 1; i < buf_len; ++i)
-				buf[i] = '\0';
-		}
-			
+	if (unicode_value <= 0x007F)
+	{
+		/* UTF-8, 1 byte: 0vvvvvvv */
+		string[0] = unicode_value;
+		string[1] = '\0';
 	}
+	else if (unicode_value <= 0x07FF)
+	{
+		/* UTF-8, 2 bytes: 110vvvvv 10vvvvvv */
+		string[0] = 0xC0 | ((unicode_value >> 6) & 0x1F);
+		string[1] = 0x80 | (unicode_value & 0x3F);
+		string[2] = '\0';
+	}
+	else if (unicode_value <= 0xFFFF)
+	{
+		/* UTF-8, 3 bytes: 1110vvvv 10vvvvvv 10vvvvvv */
+		string[0] = 0xE0 | ((unicode_value >> 12) & 0x0F);
+		string[1] = 0x80 | ((unicode_value >> 6) & 0x3F);
+		string[2] = 0x80 | (unicode_value & 0x3F);
+		string[3] = '\0';
+	}
+	else if (unicode_value <= 0x1FFFFF)
+	{
+		/* UTF-8, 4 bytes: 11110vvv 10vvvvvv 10vvvvvv 10vvvvvv */
+		string[0] = 0xF0 | ((unicode_value >> 18) & 0x07);
+		string[1] = 0x80 | ((unicode_value >> 12) & 0x3F);
+		string[2] = 0x80 | ((unicode_value >> 6) & 0x3F);
+		string[3] = 0x80 | (unicode_value & 0x3F);
+		string[4] = '\0';
+	}
+}
+
+int utf8_char_int (const char *string)
+{
+	const unsigned char *ptr_string;
+
+	if (!string)
+		return 0;
+
+	ptr_string = (unsigned char *)string;
+
+	/* UTF-8, 2 bytes: 110vvvvv 10vvvvvv */
+	if ((ptr_string[0] & 0xE0) == 0xC0)
+	{
+		if (!ptr_string[1])
+			return (int)(ptr_string[0] & 0x1F);
+		return ((int)(ptr_string[0] & 0x1F) << 6) +
+		       ((int)(ptr_string[1] & 0x3F));
+	}
+	/* UTF-8, 3 bytes: 1110vvvv 10vvvvvv 10vvvvvv */
+	else if ((ptr_string[0] & 0xF0) == 0xE0)
+	{
+		if (!ptr_string[1])
+			return (int)(ptr_string[0] & 0x0F);
+		if (!ptr_string[2])
+			return (((int)(ptr_string[0] & 0x0F)) << 6) +
+			       ((int)(ptr_string[1] & 0x3F));
+		return (((int)(ptr_string[0] & 0x0F)) << 12) +
+		       (((int)(ptr_string[1] & 0x3F)) << 6) +
+		       ((int)(ptr_string[2] & 0x3F));
+	}
+	/* UTF-8, 4 bytes: 11110vvv 10vvvvvv 10vvvvvv 10vvvvvv */
+	else if ((ptr_string[0] & 0xF8) == 0xF0)
+	{
+		if (!ptr_string[1])
+			return (int)(ptr_string[0] & 0x07);
+		if (!ptr_string[2])
+			return (((int)(ptr_string[0] & 0x07)) << 6) +
+			       ((int)(ptr_string[1] & 0x3F));
+		if (!ptr_string[3])
+			return (((int)(ptr_string[0] & 0x07)) << 12) +
+			       (((int)(ptr_string[1] & 0x3F)) << 6) +
+			       ((int)(ptr_string[2] & 0x3F));
+		return (((int)(ptr_string[0] & 0x07)) << 18) +
+		       (((int)(ptr_string[1] & 0x3F)) << 12) +
+		       (((int)(ptr_string[2] & 0x3F)) << 6) +
+		       ((int)(ptr_string[3] & 0x3F));
+	}
+	/* UTF-8, 1 byte: 0vvvvvvv */
+	return (int)ptr_string[0];
 }
