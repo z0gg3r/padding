@@ -77,4 +77,6 @@ tags
 # Persistent undo
 [._]*.un~
 
+m4/
+
 # End of https://www.toptal.com/developers/gitignore/api/c,vim
