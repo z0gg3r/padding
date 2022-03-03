@@ -20,7 +20,7 @@ sides of s, until p has reached size as length (without the null terminator).
 If size is smaller or equal to the length of s, the return value is s. In all other cases a padded string p is returned.
 
 .SH NOTES
-While the allocate space for p should be at least size + 1, size does not reflect the actual size of the buffer (in bytes),
+While the allocated space for p should be at least size + 1, size does not reflect the actual size of the buffer (in bytes),
 but rather the number of characters that should be printed to the screen. If utf8 'characters' are to be stored, the buffer
 should be larger than size + 1.
 
