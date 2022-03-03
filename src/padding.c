@@ -68,8 +68,8 @@ char *pad_right(char *s, int size, char *p, char *_pad)
 
 /*
  * Takes an integer size and a character p and a string
- * containing p size times. Expects n to not count the
- * null terminator.
+ * containing p size times. Size is the number of characters,
+ * not the allocate memory!
  */
 char *padding(int size, char *p)
 {
