@@ -20,12 +20,12 @@ char *pad_left(char *s, int size, char *p, char *_pad)
 	if (strlen(s) >= size)
 		return s;
 
-	char *b = padding(size - strlen(s), _pad);
+	char *buf = padding(size - strlen(s), _pad);
 
-	strncat(p, b, strlen(b));
+	strncat(p, buf, strlen(buf));
 	strncat(p, s, strlen(s));
 
-	free(b);
+	free(buf);
 	return p;
 }
 
@@ -38,13 +38,13 @@ char *pad_both(char *s, int size, char *p, char *_pad)
 		return s;
 	int b_size = (size - strlen(s)) / 2;
 
-	char *b1 = padding(b_size, _pad);
+	char *buf = padding(b_size, _pad);
 
-	strncat(p, b1, strlen(b1));
+	strncat(p, buf, strlen(buf));
 	strncat(p, s, strlen(s));
-	strncat(p, b1, strlen(b1));
+	strncat(p, buf, strlen(buf));
 
-	free(b1);
+	free(buf);
 
 	return p;
 }
@@ -56,12 +56,12 @@ char *pad_right(char *s, int size, char *p, char *_pad)
 	if (strlen(s) >= size)
 		return s;
 
-	char *b = padding(size - strlen(s), _pad);
+	char *buf = padding(size - strlen(s), _pad);
 
 	strncat(p, s, strlen(s));
-	strncat(p, b, strlen(b));
+	strncat(p, buf, strlen(buf));
 
-	free(b);
+	free(buf);
 
 	return p;
 }
